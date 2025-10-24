@@ -28,9 +28,9 @@ Crear un sistema que conecte egresados y empresas de manera eficiente, donde los
 
 ## 👤 Roles de usuario
 
-- **Egresado:** puede registrarse, completar su perfil, postularse a ofertas y ver el estado de sus postulaciones.  
-- **Empresa:** puede publicar, editar y eliminar ofertas, revisar postulaciones y gestionar información de la empresa.  
-- **Administrador:** puede gestionar todos los usuarios y supervisar el funcionamiento de la plataforma.
+- **Egresado:** Puede registrarse, completar su perfil, postularse a ofertas y ver el estado de sus postulaciones.  
+- **Empresa:** Puede publicar, editar y eliminar ofertas, revisar postulaciones y gestionar información de la empresa.  
+- **Administrador:** Puede gestionar todos los usuarios y supervisar el funcionamiento de la plataforma.
 
 ---
 
