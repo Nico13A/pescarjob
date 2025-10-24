@@ -1,6 +1,6 @@
 # PescarJob+ 
 
-![Express](https://img.shields.io/badge/Express-5.1.0-lightgrey)
+![Express](https://img.shields.io/badge/Express-5.1.0-green)
 ![React](https://img.shields.io/badge/React-19+-blue) 
 ![MySQL](https://img.shields.io/badge/MySQL-8+-orange) 
 ![GitHub](https://img.shields.io/badge/GitHub-Version-blue) 
