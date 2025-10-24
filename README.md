@@ -38,19 +38,19 @@ Crear un sistema que conecte egresados y empresas de manera eficiente, donde los
 
 ### BACKEND
 
-1. Clonar el repositorio
+1. Clonar el repositorio.
 ```bash
 git clone https://github.com/Nico13A/pescarjob.git
 cd pescarjob
 ```
 
-2. Entrar a la carpeta backend
+2. Entrar a la carpeta backend.
 ```bash
 cd backend
 npm install
 ```
 
-3. Crear el archivo .env basado en .env.example y completar las credenciales
+3. Crear el archivo .env basado en .env.example y completar las credenciales.
 ```env
 DB_HOST=localhost
 DB_USER=root
@@ -61,14 +61,22 @@ JWT_SECRET=claveSecreta
 FRONTEND_URL=http://localhost:5173
 ```
 
-4. Ejecutar migraciones (backend)
-OBS. Antes de realizar las migraciones borrar la linea "type": "module", del package.json y después de realizar las migraciones volverlo a incorporar.
+4. Ejecutar migraciones (backend)<br>
+OBS. Antes de realizar las migraciones borrar la linea "type": "module", del package.json y después de realizar las migraciones volverlo a incorporar.<br>
 Ejecuta las migraciones con sequelize para crear las tablas en la base de datos:
 ```bash
 npx sequelize db:migrate
 ```
 
-5. Iniciar el servidor backend
+5. Crear roles manualmente en la base de datos:
+```sql
+INSERT INTO rol (rodescripcion) VALUES
+('Egresado'),
+('Empresa'),
+('Admin');
+```
+
+6. Iniciar el servidor backend
 ```bash
 npm run dev
 ```
