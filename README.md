@@ -36,20 +36,21 @@ Crear un sistema que conecte egresados y empresas de manera eficiente, donde los
 
 ## ⚡ Instalación desde cero
 
-### 1 Clonar el repositorio
+### BACKEND
 
+1. Clonar el repositorio
 ```bash
 git clone https://github.com/Nico13A/pescarjob.git
 cd pescarjob
 ```
 
-### 2 Entrar a la carpeta backend
+2. Entrar a la carpeta backend
 ```bash
 cd backend
 npm install
 ```
 
-### 3 Crear el archivo .env basado en .env.example y completar las credenciales
+3. Crear el archivo .env basado en .env.example y completar las credenciales
 ```env
 DB_HOST=localhost
 DB_USER=root
@@ -60,29 +61,31 @@ JWT_SECRET=claveSecreta
 FRONTEND_URL=http://localhost:5173
 ```
 
-### 4 Ejecutar migraciones (backend)
+4. Ejecutar migraciones (backend)
 Ejecuta las migraciones con sequelize para crear las tablas en la base de datos:
 ```bash
 npx sequelize db:migrate
 ```
 
-### 5 Iniciar el servidor backend
+5. Iniciar el servidor backend
 ```bash
 npm run dev
 ```
 
-### 6 Entrar a la carpeta frontend
+### FRONTEND
+
+1. Entrar a la carpeta frontend e instalar dependencias
 ```bash
 cd ./frontend
 npm install
 ```
 
-### 7 Crear el archivo .env basado en .env.example
+2. Crear el archivo .env basado en .env.example
 ```env
 VITE_API_URL=http://localhost:4000/api
 ```
 
-### 8 Iniciar el cliente frontend
+3. Iniciar el cliente frontend
 ```bash
 npm run dev
 ```
