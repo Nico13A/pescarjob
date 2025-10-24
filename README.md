@@ -62,6 +62,7 @@ FRONTEND_URL=http://localhost:5173
 ```
 
 4. Ejecutar migraciones (backend)
+OBS. Antes de realizar las migraciones borrar la linea "type": "module", del package.json y después de realizar las migraciones volverlo a incorporar.
 Ejecuta las migraciones con sequelize para crear las tablas en la base de datos:
 ```bash
 npx sequelize db:migrate
