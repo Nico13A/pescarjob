@@ -1,7 +1,7 @@
-# PescarJob+ 🚀
+# PescarJob+ 
 
-![Node.js](https://img.shields.io/badge/Node.js-18+-green) 
-![React](https://img.shields.io/badge/React-18+-blue) 
+![Express](https://img.shields.io/badge/Express-5.1.0-lightgrey)
+![React](https://img.shields.io/badge/React-19+-blue) 
 ![MySQL](https://img.shields.io/badge/MySQL-8+-orange) 
 ![GitHub](https://img.shields.io/badge/GitHub-Version-blue) 
 
@@ -12,7 +12,7 @@ Permite que los egresados se postulen a ofertas de empleo publicadas por las emp
 
 ## 🎯 Objetivo del proyecto
 
-Crear un sistema que conecte egresados y empresas de manera eficiente, donde los egresados puedan postularse a ofertas y las empresas puedan gestionar postulaciones. Los administradores supervisan el correcto funcionamiento de la plataforma.
+Crear un sistema que conecte egresados y empresas de manera eficiente, donde los egresados puedan postularse a ofertas y las empresas puedan gestionar postulaciones.
 
 ---
 
