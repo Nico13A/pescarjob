@@ -20,10 +20,10 @@ export default function SeccionHero() {
           Empezar Gratis
         </Link>
         <Link
-          to="/empleos"
+          to="/login"
           className="border border-gray-300 font-semibold py-3 px-6 rounded-lg hover:bg-gray-100 transition"
         >
-          Ver empleos
+          Ver Empleos
         </Link>
       </div>
     </section>

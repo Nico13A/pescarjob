@@ -1,10 +1,10 @@
-import { useState, useRef, useEffect } from "react";
+import { useState, useRef, useEffect, useContext } from "react";
 import { Link } from "react-router-dom";
 import { FaUserCircle } from "react-icons/fa";
-import { useAuthContext } from "../../context/AuthContext";
+import AutenticacionContext from "../../contexts/AutenticacionContext";
 
 const Navbar = () => {
-    const { cerrarSesion } = useAuthContext();
+    const {cerrarSesion} = useContext(AutenticacionContext)
 
     const [menuAbierto, setMenuAbierto] = useState(false);
     const menuRef = useRef(null);
@@ -41,16 +41,10 @@ const Navbar = () => {
             {/* Enlaces del medio */}
             <div className="flex justify-center space-x-4 md:space-x-8">
                 <Link
-                    to="/empleos"
+                    to="/egresado/empleos"
                     className="text-gray-700 hover:text-blue-600 font-semibold text-sm md:text-base"
                 >
                     Empleos
-                </Link>
-                <Link
-                    to="/chat"
-                    className="text-gray-700 hover:text-blue-600 font-semibold text-sm md:text-base"
-                >
-                    Chat
                 </Link>
             </div>
 
@@ -64,7 +58,7 @@ const Navbar = () => {
                 {menuAbierto && (
                     <div className="absolute right-0 mt-8 w-48 bg-white rounded-xl shadow border border-gray-200 py-2 z-50">
                         <Link
-                            to="/perfil"
+                            to="/egresado/perfil"
                             onClick={handleCerrarMenu}
                             className="block px-4 py-2 text-gray-700 hover:bg-gray-100"
                         >

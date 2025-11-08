@@ -2,6 +2,7 @@ import Usuario from "./user.model.js";
 import Rol from "./rol.model.js";
 import Egresado from "./egresado.model.js";
 import Empresa from "./empresa.model.js";
+import Oferta from "./oferta.model.js";
 
 // ===================================
 // RELACIONES Usuario ↔ Rol
@@ -21,5 +22,11 @@ Egresado.belongsTo(Usuario, { foreignKey: "idusuario" });
 Usuario.hasOne(Empresa, { foreignKey: "idusuario" });
 Empresa.belongsTo(Usuario, { foreignKey: "idusuario" });
 
+// ===================================
+// RELACIONES Empresa ↔ Oferta
+// ===================================
+Empresa.hasMany(Oferta, { foreignKey: "idempresa" });
+Oferta.belongsTo(Empresa, { foreignKey: "idempresa" });
+
 // Exportar todos los modelos
-export { Usuario, Rol, Egresado, Empresa };
+export { Usuario, Rol, Egresado, Empresa, Oferta };

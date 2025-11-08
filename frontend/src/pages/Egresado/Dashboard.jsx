@@ -1,4 +1,4 @@
-import EgresadoLayout from "./EgresadoLayout";
+import EgresadoLayout from "../../layout/EgresadoLayout";
 import Hero from "../../components/Hero/Hero";
 import MiPostulaciones from "../../components/MiPostulaciones/MiPostulaciones";
 

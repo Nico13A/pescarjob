@@ -9,7 +9,7 @@ const NavbarPublic = () => {
           <img
             src="/LogoPescar.png"
             alt="Logo Pescar"
-            className="h-14 w-14 md:h-20 md:w-20 object-contain"
+            className="h-14 w-14 md:h-30 md:w-30 object-contain"
           />
         </Link>
       </div>
@@ -17,20 +17,13 @@ const NavbarPublic = () => {
       {/* Enlaces del medio */}
       <div className="flex justify-center space-x-4 md:space-x-8">
         <Link
-          to="/empleos"
+          to="/login"
           className="text-gray-700 hover:text-blue-600 font-semibold text-sm md:text-base"
         >
           Empleos
         </Link>
-        <Link
-          to="/chat"
-          className="text-gray-700 hover:text-blue-600 font-semibold text-sm md:text-base"
-        >
-          Chat
-        </Link>
       </div>
 
-      {/* Espacio derecho vacío (mantiene alineación del grid) */}
       <div></div>
     </nav>
   );

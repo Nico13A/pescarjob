@@ -1,5 +1,3 @@
-import React from "react";
-
 export default function CardFeature({ icon: Icon, color, bgColor, title, description }) {
   return (
     <div className="bg-white shadow-sm rounded-lg p-6 border border-gray-100 flex flex-col items-center">

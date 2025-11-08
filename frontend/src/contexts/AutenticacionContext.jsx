@@ -1,12 +1,15 @@
-import { createContext, useState, useContext, useEffect } from "react";
+import { createContext, useState, useEffect, useContext } from "react";
 import { login, logout, getPerfil } from "../services/auth";
 
-export const AuthContext = createContext();
+// Crear el contexto
+const AutenticacionContext = createContext();
 
-export const AuthProvider = ({ children }) => {
+// Crear el provider
+const AutenticacionProvider = ({ children }) => {
   const [usuario, setUsuario] = useState(null);
   const [cargando, setCargando] = useState(true);
 
+  // Cargar usuario si hay sesión guardada
   useEffect(() => {
     const cargarUsuario = async () => {
       const tieneSesion = localStorage.getItem('hasSession') === 'true';
@@ -18,7 +21,7 @@ export const AuthProvider = ({ children }) => {
         const res = await getPerfil();
         if (res.error) {
           setUsuario(null);
-          localStorage.removeItem('hasSession'); 
+          localStorage.removeItem('hasSession');
         } else {
           setUsuario(res.data.user);
         }
@@ -32,27 +35,28 @@ export const AuthProvider = ({ children }) => {
     cargarUsuario();
   }, []);
 
+  // Función para iniciar sesión
   const iniciarSesion = async (credenciales) => {
-    setCargando(true);
     try {
       const res = await login(credenciales);
       if (res.success) {
         setUsuario(res.data.user);
-        localStorage.setItem('hasSession', 'true'); 
+        localStorage.setItem('hasSession', 'true');
       }
       return res;
-    } finally {
-      setCargando(false);
+    } catch (err) {
+      return { error: "Error de conexión" };
     }
   };
 
+  // Función para cerrar sesión
   const cerrarSesion = async () => {
     setCargando(true);
     try {
       const res = await logout();
       if (!res.error) {
         setUsuario(null);
-        localStorage.removeItem('hasSession'); 
+        localStorage.removeItem('hasSession');
       }
       return res;
     } finally {
@@ -60,18 +64,21 @@ export const AuthProvider = ({ children }) => {
     }
   };
 
+  const data = {
+    usuario,
+    cargando,
+    iniciarSesion,
+    cerrarSesion
+  };
+
   return (
-    <AuthContext.Provider
-      value={{
-        usuario,
-        cargando,
-        iniciarSesion,
-        cerrarSesion
-      }}
-    >
+    <AutenticacionContext.Provider value={data}>
       {children}
-    </AuthContext.Provider>
+    </AutenticacionContext.Provider>
   );
 };
 
-export const useAuthContext = () => useContext(AuthContext);
+
+export { AutenticacionProvider };
+export default AutenticacionContext;
+

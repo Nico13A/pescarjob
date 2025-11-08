@@ -1,19 +1,12 @@
-import { useEffect, useState } from "react";
+import { useContext, useEffect, useState } from "react";
 import { Link, useNavigate } from "react-router-dom";
 import { useAccion } from "../hooks/useAccion";
 import { register } from "../services/auth";
 import { InputField } from "../components/InputField/InputField";
 import { Spinner } from "../components/Spinner/Spinner";
-import { useAuthContext } from "../context/AuthContext";
 
 export const Register = () => {
     const navigate = useNavigate();
-    
-    const { usuario } = useAuthContext();
-
-    useEffect(() => {
-        if (usuario) navigate("/");
-    }, [usuario, navigate]);
 
     const [formData, setFormData] = useState({
         usnombre: "",

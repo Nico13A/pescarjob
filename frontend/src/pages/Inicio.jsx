@@ -1,4 +1,3 @@
-import React from "react";
 import SeccionHero from "../components/Inicio/SeccionHero";
 import CardFeature from "../components/Inicio/CardFeature";
 import Estadisticas from "../components/Inicio/Estadisticas";

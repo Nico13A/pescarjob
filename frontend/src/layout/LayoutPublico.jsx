@@ -1,5 +1,3 @@
-// src/Layout/PublicLayout.jsx
-import React from "react";
 import NavbarPublic from "../components/Navbar/NavbarPublico";
 import Footer from "../components/Footer/Footer";
 

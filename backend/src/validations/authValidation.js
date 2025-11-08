@@ -1,16 +1,5 @@
-import { body, validationResult } from "express-validator";
-
-export const handleValidationErrors = (req, res, next) => {
-  const errors = validationResult(req);
-  if (!errors.isEmpty()) {
-    return res.status(400).json({
-      success: false,
-      message: "Errores de validación",
-      errors: errors.array()
-    });
-  }
-  next();
-};
+import { body } from "express-validator";
+import { handleValidationErrors } from "../utils/handleValidation.js";
 
 // Reglas de validación para la ruta de Registro 
 export const validateRegister = [

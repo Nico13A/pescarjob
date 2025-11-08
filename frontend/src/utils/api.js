@@ -10,12 +10,13 @@ export const api = axios.create({
 
 export const apiRequest = async (method, endpoint, data = {}, options = {}) => {
   try {
-    let response;
-    if (["get", "delete"].includes(method.toLowerCase())) {
-      response = await api[method](endpoint, { params: data, ...options });
-    } else {
-      response = await api[method](endpoint, data, options);
-    }
+    const response = await api.request({
+      method,
+      url: endpoint,
+      data: ["post", "put", "patch"].includes(method.toLowerCase()) ? data : undefined,
+      params: ["get", "delete"].includes(method.toLowerCase()) ? data : undefined,
+      ...options,
+    });
     return response.data;
   } catch (error) {
     return handleApiError(error);
