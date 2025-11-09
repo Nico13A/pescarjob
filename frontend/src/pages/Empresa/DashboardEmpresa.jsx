@@ -89,7 +89,7 @@ const DashboardEmpresa = () => {
                 stats={stats}
             >
                 <button
-                    className="cursor-pointer w-full bg-blue-600 hover:bg-blue-700 text-white font-medium px-4 py-2 rounded-xl shadow transition-all"
+                    className="cursor-pointer w-full bg-blue-600 hover:bg-blue-700 text-white font-medium px-4 py-2 rounded-full shadow transition-all"
                     onClick={() => navigate('/empresa/crear-oferta')}
                 >
                     Crear oferta
@@ -97,10 +97,10 @@ const DashboardEmpresa = () => {
             </Hero>
 
             {/* Tabs */}
-            <div className="bg-[#E8EBFD] rounded-2xl flex flex-wrap p-4 items-center justify-center md:space-x-4 mb-8 max-w-7xl mx-auto">
+            <div className="bg-[#E8EBFD] rounded-full flex flex-wrap p-4 items-center justify-center md:space-x-4 mb-8 max-w-7xl mx-auto">
                 <button
                     onClick={() => setTab("ofertas")}
-                    className={`text-sm md:text-lg flex-1 cursor-pointer px-4 py-1 rounded-xl font-medium transition-all ${tab === "ofertas"
+                    className={`text-sm md:text-lg flex-1 cursor-pointer px-4 py-1 rounded-full font-medium transition-all ${tab === "ofertas"
                         ? "bg-blue-600 text-white shadow-md"
                         : "text-gray-700 hover:text-blue-600"
                         }`}
@@ -110,7 +110,7 @@ const DashboardEmpresa = () => {
 
                 <button
                     onClick={() => setTab("postulaciones")}
-                    className={`text-sm md:text-lg flex-1 cursor-pointer px-4 py-1 rounded-xl font-medium transition-all ${tab === "postulaciones"
+                    className={`text-sm md:text-lg flex-1 cursor-pointer px-4 py-1 rounded-full font-medium transition-all ${tab === "postulaciones"
                         ? "bg-blue-600 text-white shadow-md"
                         : "text-gray-700 hover:text-blue-600"
                         }`}

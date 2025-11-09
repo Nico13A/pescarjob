@@ -110,12 +110,12 @@ const MiPostulaciones = () => {
                 </p>
 
                 {/* Navbar de filtros */}
-                <div className="bg-[#E8EBFD] rounded-2xl flex flex-wrap p-4 items-center justify-between md:space-x-4 mb-8">
+                <div className="bg-[#E8EBFD] rounded-full flex flex-wrap p-4 items-center justify-between md:space-x-4 mb-8">
                     {filtros.map((f) => (
                         <button
                             key={f.value}
                             onClick={() => setFilter(f.value)}
-                            className={`cursor-pointer w-full md:w-auto px-4 py-1 rounded-xl font-medium transition-all ${filter === f.value
+                            className={`cursor-pointer w-full md:w-auto px-4 py-1 rounded-full font-medium transition-all ${filter === f.value
                                 ? "bg-blue-600 text-white shadow-md"
                                 : "text-gray-700 hover:text-blue-600"
                                 }`}

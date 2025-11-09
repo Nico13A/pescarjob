@@ -1,11 +1,13 @@
-import { useState } from "react"
-import { crearOferta } from "../../services/oferta"
-import { useAccion } from "../../hooks/useAccion"
-import EmpresaLayout from "../../layout/EmpresaLayout"
+import { useState, useEffect } from "react"
 import { InputField } from "../../components/InputField/InputField"
 import { Spinner } from "../../components/Spinner/Spinner"
+import { useAccion } from "../../hooks/useAccion"
+import { crearOferta, actualizarOferta } from "../../services/oferta"
+import EmpresaLayout from "../../layout/EmpresaLayout"
 
-const CrearOferta = () => {
+const FormularioOferta = ({ ofertaInicial = null }) => {
+  const esEdicion = Boolean(ofertaInicial)
+
   const [formData, setFormData] = useState({
     titulo: "",
     descripcion: "",
@@ -17,7 +19,15 @@ const CrearOferta = () => {
   })
 
   const [mensaje, setMensaje] = useState(null)
-  const { ejecutar, cargando, error, erroresCampos, limpiarErrores } = useAccion(crearOferta)
+
+  // Hook reutilizable
+  const { ejecutar, cargando, error, erroresCampos, limpiarErrores } = useAccion(
+    esEdicion ? actualizarOferta : crearOferta
+  )
+
+  useEffect(() => {
+    if (ofertaInicial) setFormData(ofertaInicial)
+  }, [ofertaInicial])
 
   const handleChange = (e) => {
     setFormData({ ...formData, [e.target.name]: e.target.value })
@@ -27,20 +37,20 @@ const CrearOferta = () => {
   const handleSubmit = async (e) => {
     e.preventDefault()
     setMensaje(null)
-
     const res = await ejecutar(formData)
-
     if (res?.success) {
-      setMensaje("Oferta creada con éxito")
-      setFormData({
-        titulo: "",
-        descripcion: "",
-        modalidad: "remoto",
-        ubicacion: "",
-        fecha_fin: "",
-        salario: "",
-        jornada: "Tiempo completo",
-      })
+      setMensaje(esEdicion ? "Oferta actualizada con éxito" : "Oferta creada con éxito")
+      if (!esEdicion) {
+        setFormData({
+          titulo: "",
+          descripcion: "",
+          modalidad: "remoto",
+          ubicacion: "",
+          fecha_fin: "",
+          salario: "",
+          jornada: "Tiempo completo",
+        })
+      }
     }
   }
 
@@ -48,10 +58,20 @@ const CrearOferta = () => {
     <EmpresaLayout>
       <div className="py-12">
         <div className="max-w-4xl mx-auto">
-          <h2 className="text-3xl font-bold mb-2">Crear nueva oferta</h2>
-          <p className="text-gray-600 mb-6">Completa los datos para publicar tu oferta laboral</p>
-          <form onSubmit={handleSubmit} className="space-y-5 bg-white/90 backdrop-blur-sm shadow-md px-4 py-6 md:p-10 rounded-xl border border-gray-100">
-            {/* Título */}
+          <h2 className="text-3xl font-bold mb-2">
+            {esEdicion ? "Editar oferta" : "Crear nueva oferta"}
+          </h2>
+          <p className="text-gray-600 mb-6">
+            {esEdicion
+              ? "Modifica los datos de la oferta laboral"
+              : "Completa los datos para publicar tu oferta laboral"}
+          </p>
+
+          {/* FORMULARIO */}
+          <form
+            onSubmit={handleSubmit}
+            className="space-y-5 bg-white/90 backdrop-blur-sm shadow-md px-4 py-6 md:p-10 rounded-xl border border-gray-100"
+          >
             <InputField
               label="Título de la posición"
               id="titulo"
@@ -70,9 +90,9 @@ const CrearOferta = () => {
               <textarea
                 id="descripcion"
                 name="descripcion"
-                placeholder="Describe las responsabilidades, requisitos y beneficios del puesto..."
                 value={formData.descripcion}
                 onChange={handleChange}
+                placeholder="Describe las responsabilidades, requisitos y beneficios..."
                 className="text-xs md:text-base w-full px-4 py-2 border border-gray-300 rounded focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent h-32 resize-none transition-all"
               />
               {erroresCampos?.descripcion && (
@@ -91,7 +111,7 @@ const CrearOferta = () => {
                   name="modalidad"
                   value={formData.modalidad}
                   onChange={handleChange}
-                  className="text-xs md:text-base w-full px-4 py-2 border border-gray-300 rounded focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent transition-all bg-white"
+                  className="text-xs md:text-base w-full px-4 py-2 border border-gray-300 rounded focus:outline-none focus:ring-2 focus:ring-blue-500 bg-white"
                 >
                   <option value="remoto">Remoto</option>
                   <option value="presencial">Presencial</option>
@@ -108,7 +128,7 @@ const CrearOferta = () => {
                   name="jornada"
                   value={formData.jornada}
                   onChange={handleChange}
-                  className="text-xs md:text-base w-full px-4 py-2 border border-gray-300 rounded focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent transition-all bg-white"
+                  className="text-xs md:text-base w-full px-4 py-2 border border-gray-300 rounded focus:outline-none focus:ring-2 focus:ring-blue-500 bg-white"
                 >
                   <option value="Tiempo completo">Tiempo completo (8 hs)</option>
                   <option value="Medio tiempo">Medio tiempo (4 hs)</option>
@@ -116,7 +136,7 @@ const CrearOferta = () => {
               </div>
             </div>
 
-            {/* Ubicación y Salario */}
+            {/* Ubicación y salario */}
             <div className="grid md:grid-cols-2 gap-6">
               <InputField
                 label="Ubicación"
@@ -126,7 +146,6 @@ const CrearOferta = () => {
                 onChange={handleChange}
                 placeholder="Ej: Buenos Aires, Argentina"
               />
-
               <InputField
                 label="Salario (opcional)"
                 id="salario"
@@ -138,9 +157,9 @@ const CrearOferta = () => {
               />
             </div>
 
-            {/* Fecha de finalización */}
+            {/* Fecha fin */}
             <InputField
-              label="Fecha de finalización de la oferta"
+              label="Fecha de finalización"
               id="fecha_fin"
               name="fecha_fin"
               type="date"
@@ -149,29 +168,25 @@ const CrearOferta = () => {
               error={erroresCampos?.fecha_fin}
             />
 
-            {/* Botón de envío */}
+            {/* Botón */}
             <button
               type="submit"
               disabled={cargando}
               className="w-full bg-blue-600 text-white py-4 rounded-xl cursor-pointer hover:bg-blue-700 transition"
             >
-              {cargando ? <Spinner /> : "Publicar oferta"}
+              {cargando ? <Spinner /> : esEdicion ? "Guardar cambios" : "Publicar oferta"}
             </button>
           </form>
 
-          {/* Mensajes de éxito/error */}
+          {/* Mensajes */}
           {mensaje && (
-            <div className="mt-5 p-4 bg-green-50 border border-green-200 rounded-xl">
-              <p className="text-sm md:text-base text-green-700 text-center font-medium flex items-center justify-center gap-2">
-                {mensaje}
-              </p>
+            <div className="mt-5 p-4 bg-green-50 border border-green-200 rounded-xl text-center text-green-700 font-medium">
+              {mensaje}
             </div>
           )}
           {error && (
-            <div className="mt-5 p-4 bg-red-50 border border-red-200 rounded-xl">
-              <p className="text-sm md:text-base text-red-600 text-center font-medium flex items-center justify-center gap-2">
-                <span className="text-xl">✕</span> {error}
-              </p>
+            <div className="mt-5 p-4 bg-red-50 border border-red-200 rounded-xl text-center text-red-600 font-medium">
+              {error}
             </div>
           )}
         </div>
@@ -180,4 +195,4 @@ const CrearOferta = () => {
   )
 }
 
-export default CrearOferta
+export default FormularioOferta
