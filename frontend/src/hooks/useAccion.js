@@ -24,7 +24,6 @@ export const useAccion = (accionFn) => {
     }
   };
 
-
   const limpiarErrores = () => {
     setError(null);
     setErroresCampos(null);

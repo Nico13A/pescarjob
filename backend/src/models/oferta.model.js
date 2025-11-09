@@ -39,6 +39,15 @@ const Oferta = sequelize.define("Oferta", {
     type: DataTypes.ENUM("Activa", "Cerrada", "Suspendida"),
     defaultValue: "Activa",
   },
+  salario: {
+    type: DataTypes.DECIMAL(10, 2),
+    allowNull: true,
+  },
+  jornada: {
+    type: DataTypes.ENUM("Tiempo completo", "Medio tiempo"),
+    defaultValue: "Tiempo completo",
+    allowNull: false,
+  },
 }, {
   tableName: "oferta",
   timestamps: false,

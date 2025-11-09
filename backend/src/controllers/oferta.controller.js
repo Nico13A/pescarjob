@@ -7,7 +7,7 @@ import { sendSuccess, sendError } from "../utils/response.js";
 export const crearOferta = async (req, res) => {
   try {
     const idusuario = req.usuarioId;
-    const { titulo, descripcion, modalidad, ubicacion, fecha_fin } = req.body;
+    const { titulo, descripcion, modalidad, ubicacion, fecha_fin, salario, jornada } = req.body;
 
     const empresa = await Empresa.findOne({ where: { idusuario } });
     if (!empresa) {
@@ -21,6 +21,8 @@ export const crearOferta = async (req, res) => {
       modalidad,
       ubicacion,
       fecha_fin,
+      salario,
+      jornada
     });
     return sendSuccess(res, nuevaOferta, "Oferta creada con éxito", 201);
   } catch (error) {
@@ -86,7 +88,7 @@ export const actualizarOferta = async (req, res) => {
   try {
     const { id } = req.params;
     const idusuario = req.usuarioId;
-    const { titulo, descripcion, modalidad, ubicacion, fecha_fin, estado } = req.body;
+    const { titulo, descripcion, modalidad, ubicacion, fecha_fin, estado, salario, jornada } = req.body;
 
     const empresa = await Empresa.findOne({ where: { idusuario } });
     if (!empresa) {
@@ -108,6 +110,8 @@ export const actualizarOferta = async (req, res) => {
       ubicacion,
       fecha_fin,
       estado,
+      salario,
+      jornada
     });
 
     return sendSuccess(res, oferta, "Oferta actualizada correctamente");

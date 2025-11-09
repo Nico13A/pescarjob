@@ -12,6 +12,7 @@ import Postulaciones from "../pages/Egresado/Postulaciones";
 import Perfil from "../pages/Egresado/Perfil";
 
 import DashboardEmpresa from "../pages/Empresa/DashboardEmpresa";
+import CrearOferta from "../pages/Empresa/CrearOferta";
 
 export const AppRouter = () => {
   return (
@@ -43,6 +44,8 @@ export const AppRouter = () => {
         {/* Rutas privadas - Empresa */}
         <Route element={<PrivateRoute rol="Empresa" />}>
           <Route path="/empresa" element={<DashboardEmpresa />} />
+          <Route path="/empresa/crear-oferta" element={<CrearOferta />} />
+
         </Route>
 
         {/* Redirección por defecto */}
