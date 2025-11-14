@@ -51,6 +51,9 @@ export const AppRouter = () => {
           <Route path="/empresa" element={<DashboardEmpresa />} />
           <Route path="/empresa/crear-oferta" element={<FormularioOferta />} />
           <Route path="/empresa/editar-oferta/:id" element={<FormularioOferta />} />
+          <Route path="/empresa/perfil" element={<Perfil />} />
+          <Route path="/empresa/ofertas" element={<Perfil />} />
+          <Route path="/empresa/postulaciones" element={<Perfil />} />
         </Route>
 
         {/* Redirección por defecto */}

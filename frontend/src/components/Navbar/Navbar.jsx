@@ -2,12 +2,19 @@ import { useState, useRef, useEffect, useContext } from "react";
 import { Link } from "react-router-dom";
 import { FaUserCircle } from "react-icons/fa";
 import AutenticacionContext from "../../contexts/AutenticacionContext";
+import { menuLinks, perfilLinks } from "../../config/menuConfig";
 
 const Navbar = () => {
-    const {cerrarSesion} = useContext(AutenticacionContext)
+    const {usuario, cerrarSesion} = useContext(AutenticacionContext)
 
     const [menuAbierto, setMenuAbierto] = useState(false);
     const menuRef = useRef(null);
+
+    const rol = usuario?.rol  || "Egresado";
+
+    const links = menuLinks[rol] || [];
+
+    const perfilPath = perfilLinks[rol];
 
     useEffect(() => {
         const manejarClickFuera = (e) => {
@@ -38,14 +45,17 @@ const Navbar = () => {
                 />
             </div>
 
-            {/* Enlaces del medio */}
+            {/* Enlaces dinámicos */}
             <div className="flex justify-center space-x-4 md:space-x-8">
-                <Link
-                    to="/egresado/empleos"
-                    className="text-gray-700 hover:text-blue-600 font-semibold text-sm md:text-base"
-                >
-                    Empleos
-                </Link>
+                {links.map((l) => (
+                    <Link
+                        key={l.path}
+                        to={l.path}
+                        className="text-gray-700 hover:text-blue-600 font-semibold text-sm md:text-base"
+                    >
+                        {l.label}
+                    </Link>
+                ))}
             </div>
 
             {/* Menú perfil */}
@@ -58,7 +68,7 @@ const Navbar = () => {
                 {menuAbierto && (
                     <div className="absolute right-0 mt-8 w-48 bg-white rounded-xl shadow border border-gray-200 py-2 z-50">
                         <Link
-                            to="/egresado/perfil"
+                            to={perfilPath}
                             onClick={handleCerrarMenu}
                             className="block px-4 py-2 text-gray-700 hover:bg-gray-100"
                         >
