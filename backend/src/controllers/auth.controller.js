@@ -59,7 +59,7 @@ export const login = async (req, res) => {
     if (!validPass) return sendError(res, "Contraseña incorrecta", 401);
 
     const token = jwt.sign(
-      { id: usuario.idusuario, rol: usuario.idrol },
+      { id: usuario.idusuario, rol: usuario.Rol.rodescripcion },
       process.env.JWT_SECRET,
       { expiresIn: "1d" }
     );

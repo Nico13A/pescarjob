@@ -12,11 +12,16 @@ import Postulaciones from "../pages/Egresado/Postulaciones";
 import Perfil from "../pages/Egresado/Perfil";
 
 import DashboardEmpresa from "../pages/Empresa/DashboardEmpresa";
-import CrearOferta from "../pages/Empresa/CrearOferta";
+import FormularioOferta from "../pages/Empresa/FormularioOferta";
+
+import ScrollToTop from "../components/ScrollToTop/ScrollToTop";
 
 export const AppRouter = () => {
   return (
     <BrowserRouter>
+
+      <ScrollToTop />
+
       <Routes>
 
         {/* Rutas públicas */}
@@ -44,8 +49,8 @@ export const AppRouter = () => {
         {/* Rutas privadas - Empresa */}
         <Route element={<PrivateRoute rol="Empresa" />}>
           <Route path="/empresa" element={<DashboardEmpresa />} />
-          <Route path="/empresa/crear-oferta" element={<CrearOferta />} />
-
+          <Route path="/empresa/crear-oferta" element={<FormularioOferta />} />
+          <Route path="/empresa/editar-oferta/:id" element={<FormularioOferta />} />
         </Route>
 
         {/* Redirección por defecto */}

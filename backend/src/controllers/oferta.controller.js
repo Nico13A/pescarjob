@@ -6,12 +6,17 @@ import { sendSuccess, sendError } from "../utils/response.js";
 // ===============================
 export const crearOferta = async (req, res) => {
   try {
-    const idusuario = req.usuarioId;
+    const { usuarioId, usuarioRol } = req;
     const { titulo, descripcion, modalidad, ubicacion, fecha_fin, salario, jornada } = req.body;
 
-    const empresa = await Empresa.findOne({ where: { idusuario } });
-    if (!empresa) {
+    if (usuarioRol !== "Empresa") {
       return sendError(res, "Solo las empresas pueden crear ofertas", 403);
+    }
+
+    const empresa = await Empresa.findOne({ where: { idusuario: usuarioId } });
+
+    if (!empresa) {
+      return sendError(res, "No se encontró la empresa asociada al usuario", 404);
     }
 
     const nuevaOferta = await Oferta.create({
@@ -87,12 +92,16 @@ export const obtenerOfertaPorId = async (req, res) => {
 export const actualizarOferta = async (req, res) => {
   try {
     const { id } = req.params;
-    const idusuario = req.usuarioId;
+    const { usuarioId, usuarioRol } = req;
     const { titulo, descripcion, modalidad, ubicacion, fecha_fin, estado, salario, jornada } = req.body;
 
-    const empresa = await Empresa.findOne({ where: { idusuario } });
-    if (!empresa) {
+    if (usuarioRol !== "Empresa") {
       return sendError(res, "Solo las empresas pueden actualizar ofertas", 403);
+    }
+
+    const empresa = await Empresa.findOne({ where: { idusuario: usuarioId } });
+    if (!empresa) {
+      return sendError(res, "No se encontró la empresa asociada al usuario", 404);
     }
 
     const oferta = await Oferta.findOne({
@@ -111,7 +120,7 @@ export const actualizarOferta = async (req, res) => {
       fecha_fin,
       estado,
       salario,
-      jornada
+      jornada,
     });
 
     return sendSuccess(res, oferta, "Oferta actualizada correctamente");
@@ -128,11 +137,15 @@ export const actualizarOferta = async (req, res) => {
 export const eliminarOferta = async (req, res) => {
   try {
     const { id } = req.params;
-    const idusuario = req.usuarioId;
+    const { usuarioId, usuarioRol } = req;
 
-    const empresa = await Empresa.findOne({ where: { idusuario } });
-    if (!empresa) {
+    if (usuarioRol !== "Empresa") {
       return sendError(res, "Solo las empresas pueden eliminar ofertas", 403);
+    }
+
+    const empresa = await Empresa.findOne({ where: { idusuario: usuarioId } });
+    if (!empresa) {
+      return sendError(res, "No se encontró la empresa asociada al usuario", 404);
     }
 
     const oferta = await Oferta.findOne({

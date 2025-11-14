@@ -4,10 +4,14 @@ import { obtenerOfertas } from "../../services/oferta"
 import { useAccion } from "../../hooks/useAccion"
 import Hero from "../../components/Hero/Hero"
 import { useNavigate } from "react-router-dom"
+import OfertaCard from "../../components/OfertaCard/OfertaCard"
+import { eliminarOferta } from "../../services/oferta"
+import Swal from "sweetalert2"
 
 const DashboardEmpresa = () => {
     const navigate = useNavigate()
     const listar = useAccion(obtenerOfertas)
+    const eliminar = useAccion(eliminarOferta)
 
     const [ofertas, setOfertas] = useState([])
 
@@ -30,32 +34,34 @@ const DashboardEmpresa = () => {
         fetchOfertas()
     }, [])
 
-    const ofertasEjemplo = [
-        {
-            id: 1,
-            titulo: "Desarrollador Frontend",
-            descripcion: "Buscamos un desarrollador con experiencia en React y Tailwind.",
-            ubicacion: "Buenos Aires",
-            modalidad: "Remoto",
-            fecha_publicacion: "2025-10-20",
-        },
-        {
-            id: 2,
-            titulo: "Diseñador UX/UI",
-            descripcion: "Encargado de mejorar la experiencia del usuario de nuestra app.",
-            ubicacion: "Córdoba",
-            modalidad: "Híbrido",
-            fecha_publicacion: "2025-09-15",
-        },
-        {
-            id: 3,
-            titulo: "Backend Developer",
-            descripcion: "Responsable de mantener y optimizar nuestras APIs en Node.js.",
-            ubicacion: "Rosario",
-            modalidad: "Presencial",
-            fecha_publicacion: "2025-08-30",
-        },
-    ]
+    const handleEditar = (id) => {
+        navigate(`/empresa/editar-oferta/${id}`);
+    };
+
+    const handleEliminar = async (id) => {
+        const result = await Swal.fire({
+            title: "¿Eliminar oferta?",
+            text: "Esta acción no se puede deshacer.",
+            icon: "warning",
+            showCancelButton: true,
+            confirmButtonColor: "#d33",
+            cancelButtonColor: "#3085d6",
+            confirmButtonText: "Si, eliminar",
+            cancelButtonText: "Cancelar",
+        })
+        if (!result.isConfirmed) return
+        const res = await eliminar.ejecutar(id)
+        if (res?.success) {
+            setOfertas(prev => prev.filter(o => o.idoferta !== id))
+            Swal.fire({
+                title: "Eliminada",
+                text: "La oferta fue eliminada correctamente.",
+                icon: "success",
+                timer: 1500,
+                showConfirmButton: false
+            })
+        }
+    }
 
     const postulacionesEjemplo = [
         {
@@ -119,26 +125,11 @@ const DashboardEmpresa = () => {
                 </button>
             </div>
 
-            {/* Contenido dinámico */}
-            <div className="max-w-7xl mx-auto px-4">
+            <section className="max-w-7xl mx-auto px-4">
                 {tab === "ofertas" ? (
                     <div className="grid gap-4">
-                        {ofertasEjemplo.map((o) => (
-                            <div
-                                key={o.id}
-                                className="p-4 bg-white rounded-xl shadow flex flex-col md:flex-row justify-between"
-                            >
-                                <div>
-                                    <h3 className="text-lg font-semibold">{o.titulo}</h3>
-                                    <p className="text-sm text-gray-600">{o.descripcion}</p>
-                                    <p className="text-sm mt-1">
-                                        📍 {o.ubicacion} | 💼 {o.modalidad}
-                                    </p>
-                                </div>
-                                <p className="text-sm text-gray-500 mt-2 md:mt-0">
-                                    Publicada: {o.fecha_publicacion}
-                                </p>
-                            </div>
+                        {ofertas.map((o) => (
+                            <OfertaCard key={o.idoferta} oferta={o} onEliminar={() => handleEliminar(o.idoferta)} onEditar={() => handleEditar(o.idoferta)}  />
                         ))}
                     </div>
                 ) : (
@@ -161,7 +152,7 @@ const DashboardEmpresa = () => {
                         ))}
                     </div>
                 )}
-            </div>
+            </section>
 
         </EmpresaLayout>
     )
