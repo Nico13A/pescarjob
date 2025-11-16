@@ -13,6 +13,7 @@ export const PrivateRoute = ({ rol }) => {
   if (rol && usuario.rol !== rol) {
     if (usuario.rol === "Egresado") return <Navigate to="/egresado" />;
     if (usuario.rol === "Empresa") return <Navigate to="/empresa" />;
+    if (usuario.rol === "Admin") return <Navigate to="/admin" />;
   }
 
   return <Outlet />;

@@ -11,6 +11,7 @@ export const PublicRoute = () => {
   if (usuario) {
     if (usuario.rol === 'Empresa') return <Navigate to="/empresa" />;
     if (usuario.rol === 'Egresado') return <Navigate to="/egresado" />;
+    if (usuario.rol === 'Admin') return <Navigate to="/admin" />;
   }
 
   return <Outlet />;

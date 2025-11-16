@@ -5,6 +5,7 @@ import { Register } from "../pages/Register";
 import { Login } from "../pages/Login";
 import { PrivateRoute } from "./PrivateRoute";
 import { PublicRoute } from "./PublicRoute";
+import ScrollToTop from "../components/ScrollToTop/ScrollToTop";
 
 import Dashboard from "../pages/Egresado/Dashboard";
 import Empleos from "../pages/Egresado/Empleos";
@@ -14,7 +15,7 @@ import Perfil from "../pages/Egresado/Perfil";
 import DashboardEmpresa from "../pages/Empresa/DashboardEmpresa";
 import FormularioOferta from "../pages/Empresa/FormularioOferta";
 
-import ScrollToTop from "../components/ScrollToTop/ScrollToTop";
+import AdminDashboard from "../pages/Admin/AdminDashboard";
 
 export const AppRouter = () => {
   return (
@@ -55,6 +56,12 @@ export const AppRouter = () => {
           <Route path="/empresa/ofertas" element={<Perfil />} />
           <Route path="/empresa/postulaciones" element={<Perfil />} />
         </Route>
+
+        {/* Rutas privadas - Admin */}
+        <Route element={<PrivateRoute rol="Admin" />}>
+          <Route path="/admin" element={<AdminDashboard />} />
+        </Route>
+
 
         {/* Redirección por defecto */}
         <Route path="*" element={<Navigate to="/" />} />

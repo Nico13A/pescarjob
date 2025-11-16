@@ -62,7 +62,7 @@ FRONTEND_URL=http://localhost:5173
 ```
 
 4. Ejecutar migraciones (backend)<br>
-OBS. Antes de realizar las migraciones borrar la linea "type": "module", del package.json y después de realizar las migraciones volverlo a incorporar.<br>
+OBS. Antes de realizar las migraciones borrar la linea "type": "module", del package.json y después de realizar las migraciones volver a incorporarlo.<br>
 Ejecuta las migraciones con sequelize para crear las tablas en la base de datos:
 ```bash
 npx sequelize db:migrate
@@ -97,4 +97,39 @@ VITE_API_URL=http://localhost:4000/api
 3. Iniciar el cliente frontend
 ```bash
 npm run dev
+```
+
+### Extras (Para crear usuario admin)
+
+Actualmente el registro solo permite crear usuarios **Egresado** o **Empresa**.  
+Para crear un **Admin**, seguí estos pasos:
+
+---
+
+### 1️⃣ Registrar un usuario desde la web
+
+Ingresá a la pantalla de registro y creá un usuario con los siguientes datos:
+
+- **Nombre:** Fundación  
+- **Apellido:** Pescar  
+- **Email:** `admin@gmail.com`  
+- **Contraseña:** `admin123`  
+- **Rol (temporal):** `Empresa` o `Egresado` (cualquiera)
+
+> ⚠️ Esto es necesario porque el sistema no permite registrarse directamente como Admin.
+
+---
+
+### 2️⃣ Convertir el usuario a Admin desde la base de datos
+
+Ingresá a **phpMyAdmin**:
+
+👉 http://localhost/phpmyadmin/
+
+Luego ejecutá esta consulta SQL en tu base de datos:
+
+```sql
+UPDATE usuario
+SET idrol = 3
+WHERE usmail = 'admin@gmail.com';
 ```
