@@ -21,9 +21,6 @@ module.exports = {
     // Eliminar columnas si se hace rollback
     await queryInterface.removeColumn('oferta', 'salario');
     await queryInterface.removeColumn('oferta', 'jornada');
-
-    // Eliminar el ENUM si usás Postgres (por limpieza)
-    await queryInterface.sequelize.query('DROP TYPE IF EXISTS "enum_oferta_jornada";');
   },
 };
 

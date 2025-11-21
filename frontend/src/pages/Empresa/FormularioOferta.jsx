@@ -6,6 +6,7 @@ import { crearOferta, actualizarOferta, obtenerOfertaPorId } from "../../service
 import EmpresaLayout from "../../layout/EmpresaLayout"
 import { useParams } from "react-router-dom"
 import DotLoader from "react-spinners/DotLoader"
+import { obtenerSkills } from "../../services/skill"
 
 const FormularioOferta = () => {
   const { id } = useParams()
@@ -20,6 +21,8 @@ const FormularioOferta = () => {
     jornada: "Tiempo completo",
   })
   const [mensaje, setMensaje] = useState(null)
+  const [skillsDisponibles, setSkillsDisponibles] = useState([])
+  const [skillsSeleccionadas, setSkillsSeleccionadas] = useState([])
 
   const {
     ejecutar: ejecutarGuardar,
@@ -39,16 +42,29 @@ const FormularioOferta = () => {
     error: errorCarga
   } = useAccion(obtenerOfertaPorId)
 
+  const { ejecutar: ejecutarCargarSkills } = useAccion(obtenerSkills)
+
+  useEffect(() => {
+    const cargarSkills = async () => {
+      const res = await ejecutarCargarSkills()
+      if (!res.error) setSkillsDisponibles(res.data)
+    }
+    cargarSkills()
+  }, [])
+
   useEffect(() => {
     const cargar = async () => {
       if (!esEdicion) return
       const res = await ejecutarCargarOferta(id)
       if (res?.success) {
         const data = res.data
+        console.log(res.data);
+        
         setFormData({
           ...data,
           fecha_fin: data.fecha_fin?.substring(0, 10) ?? ""
         })
+        setSkillsSeleccionadas(data.Skills?.map(s => s.idskill) ?? [])
       }
     }
     cargar()
@@ -62,7 +78,7 @@ const FormularioOferta = () => {
   const handleSubmit = async (e) => {
     e.preventDefault()
     setMensaje(null)
-    const res = await ejecutarGuardar(formData)
+    const res = await ejecutarGuardar({...formData, skills: skillsSeleccionadas})
     if (res?.success) {
       setMensaje(esEdicion ? "Oferta actualizada con éxito" : "Oferta creada con éxito")
       if (!esEdicion) {
@@ -208,6 +224,33 @@ const FormularioOferta = () => {
               onChange={handleChange}
               error={erroresCampos?.fecha_fin}
             />
+
+            <div>
+              <label className="block text-sm font-semibold text-gray-500 mb-1">
+                Habilidades requeridas
+              </label>
+              <div className="flex flex-wrap gap-2">
+                {skillsDisponibles.map(skill => (
+                  <label key={skill.idskill} className="flex items-center gap-1 border px-2 py-1 rounded cursor-pointer text-sm">
+                    <input
+                      type="checkbox"
+                      value={skill.idskill}
+                      checked={skillsSeleccionadas.includes(skill.idskill)}
+                      onChange={e => {
+                        const id = skill.idskill;
+                        setSkillsSeleccionadas(prev =>
+                          prev.includes(id)
+                            ? prev.filter(s => s !== id)
+                            : [...prev, id]
+                        );
+                      }}
+                      className="cursor-pointer"
+                    />
+                    {skill.nombre}
+                  </label>
+                ))}
+              </div>
+            </div>
 
             <button
               type="submit"

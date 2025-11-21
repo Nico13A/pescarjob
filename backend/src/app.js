@@ -4,6 +4,7 @@ import cors from 'cors';
 import cookieParser from 'cookie-parser';
 import authRoutes from './routes/auth.routes.js';
 import ofertaRoutes from './routes/oferta.routes.js';
+import skillRoutes from './routes/skill.routes.js';
 
 const app = express();
 
@@ -18,5 +19,6 @@ app.use(cookieParser());
 
 app.use("/api", authRoutes);
 app.use("/api/ofertas", ofertaRoutes);
+app.use("/api/skills", skillRoutes);
 
 export default app;

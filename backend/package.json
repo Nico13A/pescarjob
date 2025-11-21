@@ -10,6 +10,9 @@
   "keywords": [],
   "author": "",
   "license": "ISC",
+  "sequelize": {
+    "config": "config/config.js"
+  },
   "dependencies": {
     "axios": "^1.12.2",
     "bcryptjs": "^3.0.2",

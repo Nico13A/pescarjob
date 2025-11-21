@@ -1,6 +1,6 @@
 import { useState, useEffect } from "react"
 import EmpresaLayout from "../../layout/EmpresaLayout"
-import { obtenerOfertas } from "../../services/oferta"
+import { obtenerOfertasEmpresa } from "../../services/oferta"
 import { useAccion } from "../../hooks/useAccion"
 import Hero from "../../components/Hero/Hero"
 import { useNavigate } from "react-router-dom"
@@ -10,7 +10,7 @@ import Swal from "sweetalert2"
 
 const DashboardEmpresa = () => {
     const navigate = useNavigate()
-    const listar = useAccion(obtenerOfertas)
+    const listar = useAccion(obtenerOfertasEmpresa)
     const eliminar = useAccion(eliminarOferta)
 
     const [ofertas, setOfertas] = useState([])

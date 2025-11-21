@@ -14,3 +14,6 @@ export const actualizarOferta = (id, ofertaData) => apiRequest("put", `/ofertas/
 
 // Eliminar una oferta
 export const eliminarOferta = (id) => apiRequest("delete", `/ofertas/${id}`);
+
+// Obtener ofertas de una empresa
+export const obtenerOfertasEmpresa = () => apiRequest("get", "/ofertas/empresa/mis-ofertas");
