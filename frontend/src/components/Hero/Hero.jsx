@@ -1,8 +1,8 @@
 import InfoCard from "../InfoCard/InfoCard"
 
-const Hero = ({ titulo, descripcion, stats, children }) => {
+const Hero = ({ titulo, descripcion, stats = null, children }) => {
   return (
-    <section className="py-12">
+    <section className="pt-12">
       <div className="max-w-7xl mx-auto">
 
         <div className="flex flex-col md:flex-row md:items-center md:justify-between mb-4">
@@ -13,7 +13,7 @@ const Hero = ({ titulo, descripcion, stats, children }) => {
         <p className="text-gray-600 mb-10">{descripcion}</p>
 
         <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-4 gap-6">
-          {stats.map((stat, index) => (
+          {stats && stats.map((stat, index) => (
             <InfoCard key={index} title={stat.title} value={stat.value} />
           ))}
         </div>

@@ -9,6 +9,7 @@ const Dashboard = () => {
     { title: "Aceptadas", value: 80 },
     { title: "Tasa de éxito", value: "66%" },
   ]
+
   return (
     <EgresadoLayout>
       <Hero

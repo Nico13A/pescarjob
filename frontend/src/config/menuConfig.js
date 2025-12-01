@@ -4,7 +4,7 @@ export const menuLinks = {
             label: "Empleos", path: "/egresado/empleos"
         },
         {
-            label: "Mis postulaciones", path: "/egresado/postulaciones"
+            label: "Postulaciones", path: "/egresado/postulaciones"
         }
     ],
     Empresa: [
