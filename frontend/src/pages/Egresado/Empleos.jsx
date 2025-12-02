@@ -119,7 +119,7 @@ const Empleos = () => {
                             <DotLoader color="#1d4ed8" size={60} />
                             <p className="text-gray-700">Cargando ofertas...</p>
                         </div>
-                    ) : ofertas.length === 0 ? (
+                    ) : !listar.cargando && ofertas.length === 0 ? (
                         <p className="text-gray-700 text-center w-full">
                             No se encontraron ofertas.
                         </p>
