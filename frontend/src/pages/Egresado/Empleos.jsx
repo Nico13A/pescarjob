@@ -5,96 +5,66 @@ import EgresadoLayout from "../../layout/EgresadoLayout"
 import Hero from "../../components/Hero/Hero"
 import CardOfertaEgresado from "../../components/CardOfertaEgresado/CardOfertaEgresado"
 import Dropdown from "../../components/Dropdown/Dropdown"
-import DropdownMultiSelect from "../../components/DropdownMultiSelect/DropdownMultiSelect"
 import { MdOutlineClear } from "react-icons/md"
-
-const provinciasArgentinas = [
-    "Buenos Aires", "CABA", "Catamarca", "Chaco", "Chubut", "Córdoba",
-    "Corrientes", "Entre Ríos", "Formosa", "Jujuy", "La Pampa", "La Rioja",
-    "Mendoza", "Misiones", "Neuquén", "Río Negro", "Salta", "San Juan",
-    "San Luis", "Santa Cruz", "Santa Fe", "Santiago del Estero",
-    "Tierra del Fuego", "Tucumán"
-]
+import provinciasData from "../../data/provinciasData"
+import DotLoader from "react-spinners/DotLoader"
 
 const Empleos = () => {
     const listar = useAccion(obtenerOfertas)
 
-    const [ofertasOriginales, setOfertasOriginales] = useState([])
-    const [ofertasFiltradas, setOfertasFiltradas] = useState([])
-    const [skills, setSkills] = useState([])
+    // Estados principales
+    const [ofertas, setOfertas] = useState([])
+    const [total, setTotal] = useState(0)
+    const [page, setPage] = useState(1)
+    const pageSize = 8
     const [busqueda, setBusqueda] = useState("")
 
     // Filtros
     const [filtroUbicacion, setFiltroUbicacion] = useState("")
     const [filtroModalidad, setFiltroModalidad] = useState("")
-    const [filtrosSkills, setFiltrosSkills] = useState([])
 
+    // ==========================
+    // Cargar ofertas del backend
+    // ==========================
     const cargarOfertas = async () => {
         try {
-            const res = await listar.ejecutar()
-            setOfertasOriginales(res.data)
-            setOfertasFiltradas(res.data)
+            const res = await listar.ejecutar({
+                page,
+                pageSize,
+                search: busqueda || undefined,
+                ubicacion: filtroUbicacion || undefined,
+                modalidad: filtroModalidad || undefined,
+            })
+            setOfertas(res.data.ofertas)
+            setTotal(res.data.total)
         } catch (error) {
             console.error(error)
         }
     }
 
+    // Cargar ofertas cuando cambia la página
     useEffect(() => {
         cargarOfertas()
-    }, [])
+    }, [page])
 
-    // Cargar skills únicas
+    // Resetear y cargar ofertas cuando cambia un filtro
     useEffect(() => {
-        if (ofertasOriginales.length > 0) {
-            const allSkills = ofertasOriginales.flatMap(o => o.Skills)
-            const nombres = allSkills.map(s => s.nombre)
-            const unique = [...new Set(nombres)]
-            setSkills(unique)
-        }
-    }, [ofertasOriginales])
+        setPage(1)
+        cargarOfertas()
+    }, [busqueda, filtroUbicacion, filtroModalidad])
 
-
-    // FILTRADO AUTOMÁTICO
     useEffect(() => {
-        let resultado = ofertasOriginales
+        window.scrollTo({ top: 0, behavior: "smooth" })
+    }, [ofertas])
 
-        if (busqueda.trim() !== "") {
-            const texto = busqueda.toLowerCase()
-            resultado = resultado.filter(o =>
-                o.titulo.toLowerCase().includes(texto)
-            )
-        }
-
-        if (filtroUbicacion) {
-            resultado = resultado.filter(o =>
-                o.ubicacion.toLowerCase().includes(filtroUbicacion.toLowerCase())
-            )
-        }
-
-        if (filtroModalidad) {
-            resultado = resultado.filter(o =>
-                o.modalidad.toLowerCase() === filtroModalidad.toLowerCase()
-            )
-        }
-
-        if (filtrosSkills.length > 0) {
-            resultado = resultado.filter(o => {
-                const nombresSet = new Set(o.Skills.map(s => s.nombre));
-                return filtrosSkills.every(skill => nombresSet.has(skill));
-            })
-        }
-        setOfertasFiltradas(resultado)
-    }, [busqueda, filtroUbicacion, filtroModalidad, filtrosSkills, ofertasOriginales])
-
-
-    console.log(ofertasOriginales)
 
     return (
         <EgresadoLayout>
             <Hero
                 titulo='Ofertas de empleo'
-                descripcion={`Encuentra tu próxima oportunidad profesional. ${ofertasFiltradas.length} empleos disponibles.`}
+                descripcion={`Encuentra tu próxima oportunidad profesional. ${total} empleos disponibles.`}
             />
+
             <div className="max-w-7xl mx-auto">
                 <div className="pb-10">
                     {/* Buscador */}
@@ -109,7 +79,6 @@ const Empleos = () => {
                             onChange={(e) => setBusqueda(e.target.value)}
                         />
 
-                        {/* BOTÓN X */}
                         {busqueda !== "" && (
                             <button
                                 type="button"
@@ -125,7 +94,7 @@ const Empleos = () => {
                     <div className="flex flex-col gap-4 md:w-1/2 md:ml-auto md:flex-row md:pl-2">
                         <Dropdown
                             label="Ubicación"
-                            options={provinciasArgentinas}
+                            options={provinciasData}
                             value={filtroUbicacion}
                             onChange={setFiltroUbicacion}
                         />
@@ -135,23 +104,53 @@ const Empleos = () => {
                             value={filtroModalidad}
                             onChange={setFiltroModalidad}
                         />
-                        <DropdownMultiSelect
-                            label="Skills"
-                            options={skills}
-                            values={filtrosSkills}
-                            onChange={setFiltrosSkills}
-                        />
                     </div>
                 </div>
 
                 {/* Lista de ofertas */}
-                <section className="flex flex-wrap justify-between space-y-4 pb-12">
-                    {ofertasFiltradas.map(o => (
-                        <CardOfertaEgresado key={o.idoferta} oferta={o} />
-                    ))}
+                <section
+                    className={`pb-6 min-h-[300px] ${listar.cargando
+                            ? "flex items-center justify-center"       
+                            : "flex flex-wrap justify-between space-y-4"
+                        }`}
+                >
+                    {listar.cargando ? (
+                        <div className="flex flex-col items-center gap-4">
+                            <DotLoader color="#1d4ed8" size={60} />
+                            <p className="text-gray-700">Cargando ofertas...</p>
+                        </div>
+                    ) : ofertas.length === 0 ? (
+                        <p className="text-gray-700 text-center w-full">
+                            No se encontraron ofertas.
+                        </p>
+                    ) : (
+                        ofertas.map((o) => (
+                            <CardOfertaEgresado key={o.idoferta} oferta={o} />
+                        ))
+                    )}
                 </section>
-            </div>
 
+                {/* Paginación */}
+                <div className="flex justify-center gap-3 pb-12 items-center">
+                    <button
+                        disabled={page === 1}
+                        onClick={() => setPage(p => p - 1)}
+                        className="text-sm w-auto md:text-base md:w-[180px] px-4 py-2 bg-blue-900 hover:bg-blue-950 text-white font-semibold tracking-wider rounded-xl disabled:opacity-80 cursor-pointer"
+                    >
+                        Anterior
+                    </button>
+                    <span className="hidden md:block md:w-[180px] text-center px-4 py-2 bg-blue-100 text-blue-700 rounded-xl font-bold shadow-sm border border-blue-200 tracking-wider transition-all duration-200">
+                        Página {page}
+                    </span>
+                    <button
+                        disabled={(page * pageSize) >= total}
+                        onClick={() => setPage(p => p + 1)}
+                        className="text-sm w-auto md:text-base md:w-[180px] px-4 py-2 bg-blue-900 hover:bg-blue-950 text-white font-semibold tracking-wider rounded-xl disabled:opacity-80 cursor-pointer"
+                    >
+                        Siguiente
+                    </button>
+                </div>
+            </div>
         </EgresadoLayout>
     )
 }

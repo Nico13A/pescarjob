@@ -4,7 +4,7 @@ import { apiRequest } from "../utils/api";
 export const crearOferta = (ofertaData) => apiRequest("post", "/ofertas", ofertaData);
 
 // Obtener todas las ofertas
-export const obtenerOfertas = () => apiRequest("get", "/ofertas");
+export const obtenerOfertas = (params = {}) => apiRequest("get", "/ofertas", params);
 
 // Obtener una oferta por ID
 export const obtenerOfertaPorId = (id) => apiRequest("get", `/ofertas/${id}`);

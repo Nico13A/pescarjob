@@ -19,8 +19,8 @@ export const crearOferta = async (req, res) => {
 // ===============================
 export const obtenerOfertas = async (req, res) => {
   try {
-    const data = await ofertaService.obtenerOfertasService();
-    return sendSuccess(res, data.ofertas, data.message);
+    const data = await ofertaService.obtenerOfertasService(req.query);
+    return sendSuccess(res, data, data.message);
   } catch (error) {
     return sendError(res, error.message, error.status || 500);
   }

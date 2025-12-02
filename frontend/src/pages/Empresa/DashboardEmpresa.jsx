@@ -103,7 +103,7 @@ const DashboardEmpresa = () => {
             </Hero>
 
             {/* Tabs */}
-            <div className="bg-[#E8EBFD] rounded-full flex flex-wrap p-4 items-center justify-center md:space-x-4 mb-8 max-w-7xl mx-auto">
+            <div className="bg-[#E8EBFD] rounded-full flex flex-wrap p-4 items-center justify-center md:space-x-4 my-8 max-w-7xl mx-auto">
                 <button
                     onClick={() => setTab("ofertas")}
                     className={`text-sm md:text-lg flex-1 cursor-pointer px-4 py-1 rounded-full font-medium transition-all ${tab === "ofertas"
