@@ -5,6 +5,8 @@ import Empresa from "./empresa.model.js";
 import Oferta from "./oferta.model.js";
 import Skill from "./skill.model.js";
 import OfertaSkill from "./ofertaSkill.model.js";
+import Postulacion from "./postulacion.model.js";
+import EstadoPostulacion from "./estadoPostulacion.model.js";
 
 // ===================================
 // RELACIONES Usuario <> Rol
@@ -36,11 +38,30 @@ Oferta.belongsTo(Empresa, { foreignKey: "idempresa" });
 Oferta.belongsToMany(Skill, {
     through: OfertaSkill,
     foreignKey: "idoferta"
-})
+});
 Skill.belongsToMany(Oferta, {
     through: OfertaSkill,
     foreignKey: "idskill"
-})
+});
+
+// ===================================
+// RELACIONES Egresado <> Postulacion
+// ===================================
+Egresado.hasMany(Postulacion, { foreignKey: "idegresado" });
+Postulacion.belongsTo(Egresado, { foreignKey: "idegresado" });
+
+// ===================================
+// RELACIONES Oferta <> Postulacion
+// ===================================
+Oferta.hasMany(Postulacion, { foreignKey: "idoferta" });
+Postulacion.belongsTo(Oferta, { foreignKey: "idoferta" });
+
+// ===================================
+// RELACIONES Postulacion <> EstadoPostulacion
+// ===================================
+Postulacion.hasMany(EstadoPostulacion, { foreignKey: "idpostulacion" });
+EstadoPostulacion.belongsTo(Postulacion, { foreignKey: "idpostulacion" });
+
 
 // Exportar todos los modelos
-export { Usuario, Rol, Egresado, Empresa, Oferta, Skill, OfertaSkill };
+export { Usuario, Rol, Egresado, Empresa, Oferta, Skill, OfertaSkill, Postulacion, EstadoPostulacion };

@@ -5,6 +5,7 @@ import cookieParser from 'cookie-parser';
 import authRoutes from './routes/auth.routes.js';
 import ofertaRoutes from './routes/oferta.routes.js';
 import skillRoutes from './routes/skill.routes.js';
+import postulacionRoutes from './routes/postulacion.routes.js';
 
 const app = express();
 
@@ -20,5 +21,6 @@ app.use(cookieParser());
 app.use("/api", authRoutes);
 app.use("/api/ofertas", ofertaRoutes);
 app.use("/api/skills", skillRoutes);
+app.use("/api/postulaciones", postulacionRoutes);
 
 export default app;
