@@ -1,5 +1,5 @@
-import { crearPostulacionService } from "../services/postulacion.service"
-import { sendError, sendSuccess } from "../utils/response"
+import { crearPostulacionService } from "../services/postulacion.service.js"
+import { sendError, sendSuccess } from "../utils/response.js"
 
 
 export const crearPostulacion = async (req, res) => {

@@ -1,7 +1,7 @@
 import { Router } from "express"
-import { verificarToken } from "../middlewares/auth.middleware"
-import { verificarEgresado } from "../middlewares/verificarEgresado"
-import { crearPostulacion } from "../controllers/postulacion.controller"
+import { verificarToken } from "../middlewares/auth.middleware.js"
+import { verificarEgresado } from "../middlewares/verificarEgresado.js"
+import { crearPostulacion } from "../controllers/postulacion.controller.js"
 
 const router = Router()
 
