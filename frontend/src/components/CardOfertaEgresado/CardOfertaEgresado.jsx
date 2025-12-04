@@ -1,13 +1,23 @@
 import { FaMapPin, FaDollarSign, FaCalendar, FaBuilding, FaEye } from "react-icons/fa"
+import { useAccion } from "../../hooks/useAccion"
+import { crearPostulacion } from "../../services/postulacion"
+import { toast } from "sonner"
 
 const CardOfertaEgresado = ({ oferta }) => {
+
+    const postular = useAccion(crearPostulacion)
 
     const handleVerDetalles = () => {
         console.log("Ver detalles de oferta:", oferta.idoferta)
     }
 
-    const handlePostularse = () => {
-        console.log("Postularse a oferta:", oferta.idoferta)
+    const handlePostularse = async () => {
+        const res = await postular.ejecutar({ idoferta: oferta.idoferta })
+        if (res.error) {
+            toast.error(res.error)
+            return
+        }
+        toast.success("Postulación enviada con éxito")
     }
 
     return (

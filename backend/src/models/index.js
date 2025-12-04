@@ -47,20 +47,20 @@ Skill.belongsToMany(Oferta, {
 // ===================================
 // RELACIONES Egresado <> Postulacion
 // ===================================
-Egresado.hasMany(Postulacion, { foreignKey: "idegresado" });
-Postulacion.belongsTo(Egresado, { foreignKey: "idegresado" });
+Egresado.hasMany(Postulacion, { foreignKey: "idegresado", as: "postulaciones" });
+Postulacion.belongsTo(Egresado, { foreignKey: "idegresado", as: "egresado" });
 
 // ===================================
 // RELACIONES Oferta <> Postulacion
 // ===================================
-Oferta.hasMany(Postulacion, { foreignKey: "idoferta" });
-Postulacion.belongsTo(Oferta, { foreignKey: "idoferta" });
+Oferta.hasMany(Postulacion, { foreignKey: "idoferta", as: "postulaciones" });
+Postulacion.belongsTo(Oferta, { foreignKey: "idoferta", as: "oferta" });
 
 // ===================================
 // RELACIONES Postulacion <> EstadoPostulacion
 // ===================================
-Postulacion.hasMany(EstadoPostulacion, { foreignKey: "idpostulacion" });
-EstadoPostulacion.belongsTo(Postulacion, { foreignKey: "idpostulacion" });
+Postulacion.hasMany(EstadoPostulacion, { foreignKey: "idpostulacion", as: "estados" });
+EstadoPostulacion.belongsTo(Postulacion, { foreignKey: "idpostulacion", as: "postulacion" });
 
 
 // Exportar todos los modelos
