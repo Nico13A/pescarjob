@@ -17,8 +17,16 @@ export const crearPostulacion = async (req, res) => {
 export const obtenerPostulacionesPorEgresado = async (req, res) => {
     try {
         const idegresado = req.usuarioId
-        const postulaciones = await obtenerPostulacionesPorEgresadoService(idegresado)
-        return sendSuccess(res, postulaciones)
+        
+        let { estado = null, limit = 9, page = 1 } = req.query
+       
+        limit = Number(limit)
+        page = Number(page)
+        const offset = (page - 1) * limit
+        
+        const resultado = await obtenerPostulacionesPorEgresadoService(idegresado, estado, limit, offset)
+        
+        return sendSuccess(res, resultado)
     } catch (error) {
         return sendError(res, error.message, error.status || 500)
     }

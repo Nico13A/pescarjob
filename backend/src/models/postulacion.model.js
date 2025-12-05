@@ -21,6 +21,10 @@ const Postulacion = sequelize.define(
             type: DataTypes.DATE,
             defaultValue: DataTypes.NOW,
         },
+        fecha_ultimo_estado: {
+            type: DataTypes.DATE,
+            allowNull: true,
+        }
     },
     {
         tableName: "postulacion",

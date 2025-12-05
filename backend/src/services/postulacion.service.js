@@ -4,6 +4,7 @@ import Oferta from "../models/oferta.model.js"
 import Egresado from "../models/egresado.model.js"
 import Empresa from "../models/empresa.model.js"
 
+
 export const crearPostulacionService = async (idegresado, idoferta) => {
     // Verificar que el egresado existe
     const egresado = await Egresado.findByPk(idegresado)
@@ -38,22 +39,26 @@ export const crearPostulacionService = async (idegresado, idoferta) => {
     return postulacion
 }
 
-/*
-export const obtenerPostulacionesPorEgresadoService = async (idegresado) => {
+
+export const obtenerPostulacionesPorEgresadoService = async (idegresado, estado = null, limit = 9, offset = 0) => {
     try {
-        const postulaciones = await Postulacion.findAll({
-            where: { idegresado }
-        })
-        return postulaciones
-    } catch (error) {
-        console.error("Error al obtener postulaciones:", error)
-        throw { status: 500, message: "Error al obtener las postulaciones" }
-    }
-}
-*/
-export const obtenerPostulacionesPorEgresadoService = async (idegresado) => {
-    try {
-        const postulaciones = await Postulacion.findAll({
+        const includeEstados = {
+            model: EstadoPostulacion,
+            as: "estados",
+            required: false,
+            order: [["fecha_inicio", "DESC"]]
+        }
+
+        if (estado !== null) {
+            includeEstados.where = { estado }
+            includeEstados.required = true
+        }
+
+        const orden = estado === null
+            ? [["fecha_ultimo_estado", "DESC"], ["fecha_postulacion", "DESC"]]
+            : [["fecha_postulacion", "DESC"]]
+
+        const { rows, count } = await Postulacion.findAndCountAll({
             where: { idegresado },
             include: [
                 {
@@ -66,20 +71,24 @@ export const obtenerPostulacionesPorEgresadoService = async (idegresado) => {
                         }
                     ]
                 },
-                {
-                    model: EstadoPostulacion,
-                    as: "estados",
-                    required: false,
-                    order: [["idestado", "DESC"]],
-                }
+                includeEstados
             ],
-            order: [
-                [{ model: EstadoPostulacion, as: "estados" }, "idestado", "DESC"]
-            ]
+            limit,
+            offset,
+            distinct: true,
+            order: orden
         })
 
-        return postulaciones
+        rows.forEach(p => {
+            if (p.estados && p.estados.length > 0) {
+                p.estados.sort((a, b) => new Date(b.fecha_inicio) - new Date(a.fecha_inicio))
+            }
+        })
 
+        return {
+            postulaciones: rows,
+            total: count
+        }
     } catch (error) {
         console.error(error)
         throw { status: 500, message: "Error al obtener las postulaciones" }
