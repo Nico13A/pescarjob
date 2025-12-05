@@ -10,7 +10,7 @@ import provinciasData from "../../data/provinciasData"
 import DotLoader from "react-spinners/DotLoader"
 
 const Empleos = () => {
-    const listar = useAccion(obtenerOfertas)
+    const { ejecutar, cargando, error } = useAccion(obtenerOfertas)
 
     // Estados principales
     const [ofertas, setOfertas] = useState([])
@@ -23,12 +23,9 @@ const Empleos = () => {
     const [filtroUbicacion, setFiltroUbicacion] = useState("")
     const [filtroModalidad, setFiltroModalidad] = useState("")
 
-    // ==========================
-    // Cargar ofertas del backend
-    // ==========================
     const cargarOfertas = async () => {
         try {
-            const res = await listar.ejecutar({
+            const res = await ejecutar({
                 page,
                 pageSize,
                 search: busqueda || undefined,
@@ -47,7 +44,7 @@ const Empleos = () => {
         cargarOfertas()
     }, [page])
 
-    // Resetear y cargar ofertas cuando cambia un filtro
+    // Resetea y carga ofertas cuando cambia un filtro
     useEffect(() => {
         setPage(1)
         cargarOfertas()
@@ -109,24 +106,28 @@ const Empleos = () => {
 
                 {/* Lista de ofertas */}
                 <section
-                    className={`pb-6 min-h-[300px] ${listar.cargando
-                            ? "flex items-center justify-center"       
-                            : "flex flex-wrap justify-between space-y-4"
+                    className={`pb-6 min-h-[300px] ${cargando
+                        ? "flex items-center justify-center"
+                        : "flex flex-wrap justify-between space-y-4"
                         }`}
                 >
-                    {listar.cargando ? (
+                    {cargando && (
                         <div className="flex flex-col items-center gap-4">
                             <DotLoader color="#1d4ed8" size={60} />
                             <p className="text-gray-700">Cargando ofertas...</p>
                         </div>
-                    ) : !listar.cargando && ofertas.length === 0 ? (
-                        <p className="text-gray-700 text-center w-full">
-                            No se encontraron ofertas.
-                        </p>
-                    ) : (
-                        ofertas.map((o) => (
-                            <CardOfertaEgresado key={o.idoferta} oferta={o} />
-                        ))
+                    )}
+
+                    {!cargando && error && (
+                        <p className="text-red-600 text-center w-full">{error}</p>
+                    )}
+
+                    {!cargando && !error && ofertas.length === 0 && (
+                        <p className="text-gray-700 text-center w-full">No se encontraron ofertas.</p>
+                    )}
+
+                    {!cargando && !error && ofertas.length > 0 && (
+                        ofertas.map((o) => <CardOfertaEgresado key={o.idoferta} oferta={o} />)
                     )}
                 </section>
 

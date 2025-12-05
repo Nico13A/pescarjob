@@ -14,10 +14,10 @@ const Postulaciones = () => {
     const [page, setPage] = useState(1)
     const limit = 9
 
-    const listar = useAccion(obtenerPostulacionesEgresado)
+    const { ejecutar, cargando, error } = useAccion(obtenerPostulacionesEgresado)
 
     const cargar = async () => {
-        const res = await listar.ejecutar({ page, limit })
+        const res = await ejecutar({ page, limit })
         if (!res.error) {
             setPostulaciones(res.data.postulaciones)
             setTotal(res.data.total)
@@ -35,15 +35,14 @@ const Postulaciones = () => {
                 titulo='Mis postulaciones'
                 descripcion='Revisa el estado de tus postulaciones y sigue el progreso de cada oportunidad laboral.'
             />
-
-            <div className="mt-4 max-w-7xl mx-auto pb-12 min-h-[300px]">
-
-                {/* CARGANDO */}
-                {listar.cargando ? (
+            <section className="mt-4 max-w-7xl mx-auto min-h-[300px]">
+                {cargando ? (
                     <div className="flex flex-col items-center justify-center min-h-[300px] gap-4">
                         <DotLoader color="#1d4ed8" size={60} />
                         <p className="text-gray-700">Cargando postulaciones...</p>
                     </div>
+                ) : error ? (
+                    <p className="text-red-600 mb-4 text-center">{error}</p>
                 ) : postulaciones.length === 0 ? (
                     <div className="flex flex-col items-center justify-center min-h-[300px] text-center px-4">
                         <div className="bg-blue-100 text-blue-600 p-4 rounded-full mb-4">
@@ -72,7 +71,6 @@ const Postulaciones = () => {
                                 <CardPostulacion key={p.idpostulacion} postulacion={p} />
                             ))}
                         </div>
-
                         {/* PAGINACIÓN */}
                         <div className="flex justify-center gap-3 pb-12 items-center mt-10">
                             <button
@@ -97,7 +95,7 @@ const Postulaciones = () => {
                         </div>
                     </>
                 )}
-            </div>
+            </section>
         </EgresadoLayout>
     )
 }
