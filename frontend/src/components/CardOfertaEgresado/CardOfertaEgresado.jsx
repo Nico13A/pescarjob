@@ -77,7 +77,9 @@ const CardOfertaEgresado = ({ oferta }) => {
             {/* Acciones */}
             <div className="flex justify-between items-center pt-3 border-t border-gray-300 border-dashed">
                 <span className="text-xs md:text-sm text-gray-600">
-                    {oferta.postulaciones_count ?? 0} postulaciones
+                    {oferta.postulaciones_count === 1
+                        ? "1 postulación"
+                        : `${oferta.postulaciones_count ?? 0} postulaciones`}
                 </span>
 
                 <div className="flex gap-2">

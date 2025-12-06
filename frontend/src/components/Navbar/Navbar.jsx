@@ -38,11 +38,13 @@ const Navbar = () => {
         <nav className="bg-white shadow px-5 md:px-10 grid grid-cols-3 items-center relative">
             {/* Logo */}
             <div className="flex justify-start">
-                <img
-                    src="/LogoPescar.png"
-                    alt="Logo Pescar"
-                    className="h-14 w-14 md:h-30 md:w-30 object-contain"
-                />
+                <Link to="/">
+                    <img
+                        src="/LogoPescar.png"
+                        alt="Logo Pescar"
+                        className="h-14 w-14 md:h-30 md:w-30 object-contain"
+                    />
+                </Link>
             </div>
 
             {/* Enlaces dinámicos */}

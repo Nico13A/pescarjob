@@ -1,5 +1,5 @@
-import { Op } from "sequelize"
-import { Oferta, Empresa, Skill } from "../models/index.js"
+import { Op, Sequelize } from "sequelize"
+import { Oferta, Empresa, Skill, Postulacion } from "../models/index.js"
 
 
 export const crearOfertaService = async (req) => {
@@ -45,54 +45,47 @@ export const crearOfertaService = async (req) => {
 
 
 export const obtenerOfertasService = async (query) => {
-    const {
-        search = '',
-        ubicacion = '',
-        modalidad = '',
-        page = 1,
-        pageSize = 8
-    } = query
-
+    const { search = '', ubicacion = '', modalidad = '', page = 1, pageSize = 8 } = query
     const offset = (page - 1) * pageSize
 
     const where = {}
+    if (search.trim() !== "") where.titulo = { [Op.like]: `%${search}%` }
+    if (ubicacion.trim() !== "") where.ubicacion = { [Op.like]: `%${ubicacion}%` }
+    if (modalidad.trim() !== "") where.modalidad = modalidad
 
-    if (search.trim() !== "") {
-        where.titulo = { [Op.like]: `%${search}%` }
-    }
-
-    if (ubicacion.trim() !== "") {
-        where.ubicacion = { [Op.like]: `%${ubicacion}%` }
-    }
-
-    if (modalidad.trim() !== "") {
-        where.modalidad = modalidad
-    }
-
-    const include = [
-        {
-            model: Empresa,
-            attributes: ["idempresa", "nombre_empresa", "ubicacion"]
-        },
-        {
-            model: Skill,
-            attributes: ["idskill", "nombre"],
-            through: { attributes: [] }
-        }
-    ]
-
-    const { rows, count } = await Oferta.findAndCountAll({
+    const ofertas = await Oferta.findAndCountAll({
         where,
-        include,
+        include: [
+            {
+                model: Empresa,
+                attributes: ["idempresa", "nombre_empresa", "ubicacion"]
+            },
+            {
+                model: Skill,
+                attributes: ["idskill", "nombre"],
+                through: { attributes: [] }
+            },
+            {
+                model: Postulacion,
+                as: "postulaciones",
+                attributes: ["idpostulacion"],
+                separate: true 
+            }
+        ],
         distinct: true,
         offset,
         limit: Number(pageSize),
-        order: [["fecha_inicio", "DESC"]]
+        order: [["fecha_inicio", "DESC"]],
     })
 
+    const ofertasConCount = ofertas.rows.map(oferta => ({
+        ...oferta.toJSON(),
+        postulaciones_count: oferta.postulaciones?.length || 0
+    }))
+
     return {
-        ofertas: rows,
-        total: count,
+        ofertas: ofertasConCount,
+        total: ofertas.count,
         page: Number(page),
         pageSize: Number(pageSize),
         message: "Listado de ofertas obtenido correctamente"
